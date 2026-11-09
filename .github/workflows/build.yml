@@ -1,0 +1,25 @@
+name: Build Sessions DLL (x86)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+
+      - name: Compile
+        shell: cmd
+        run: cl /nologo /LD /EHsc /O2 Sessions.cpp /link /DEF:Sessions.def /OUT:Sessions.dll
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Sessions-x86-dll
+          path: Sessions.dll
